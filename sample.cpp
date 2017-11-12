@@ -55,3 +55,50 @@ lass LRUCache : public Cache{
     }
     
 };
+
+
+// Lool at this
+
+struct Val{
+    int value;
+    int key;
+    Val(int k, int v):key(k),value(v){};
+    Val(Val* v):key(v->key),value(v->value){}
+};
+
+class LRUCache{
+
+    vector<Val> value;
+    map<int,vector<Val>::iterator> keys;
+    int cp;
+    
+    public:
+    LRUCache(int capacity):cp(capacity){}
+    
+    void set(int key, int val){
+        
+        vector<Val>::iterator link = value.emplace(value.end(),new Val(key,val));
+        keys[key] = link;
+        
+        if(value.size() > cp){
+            Val tmp = value.front();
+            value.erase(value.begin());
+            keys.erase(tmp.key);
+        }
+    }
+    
+    int get(int key){
+        
+        if(keys.find(key) == keys.end())
+            return -1;
+        
+        Val tmp = (*keys[key]);
+        value.erase(keys[key]);
+        cout << tmp.key;
+        vector<Val>::iterator link = value.emplace(value.end(),tmp);
+        keys[key] = link;
+        for(auto v : keys)
+            cout << v.first << endl;
+        return tmp.value;
+    }
+};
