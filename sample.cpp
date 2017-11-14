@@ -102,3 +102,37 @@ class LRUCache{
         return tmp.value;
     }
 };
+
+
+// And here it is YEAH ------------------------------------------------------------------->
+
+class LRUCache{
+    
+    map<int,int> cache;
+    vector<int> order;
+    int cp;
+    
+    public:
+        LRUCache(int capacity):cp(capacity){}
+    
+        void set(int key,int val){
+            cache[key] = val;
+            order.push_back(key);
+            if(cache.size() > cp){
+                cache.erase(order.front());
+                order.erase(order.begin());
+            }
+        }
+    
+        int get(int key){
+            
+            if(cache.find(key) == cache.end())
+                return -1;
+
+            order.erase(remove(order.begin(), order.end(), key), order.end());
+            order.push_back(key);
+            return cache[key];
+        }
+    
+    
+};
